@@ -5,6 +5,7 @@
   "author": "Nils Hohmann",
   "license": "MIT",
   "scripts": {
+  	"rebuild": "$(npm bin)/electron-rebuild && npm rebuild",
     "build": "tsc",
     "electron": "electron ./dist/main.js",
     "lint": "tslint -c tslint.json -p tsconfig.json",
@@ -21,6 +22,7 @@
     "@types/jquery": "^3.2.14",
     "concurrently": "^3.5.1",
     "electron": "^1.7.8",
+    "electron-rebuild": "^1.6.0",
     "jquery": "^3.2.1",
     "keytar": "^4.0.5",
     "node-persist": "^2.1.0",
