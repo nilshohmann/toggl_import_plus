@@ -1,0 +1,27 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "max-line-length": {
+      "options": [
+        150
+      ]
+    },
+    "new-parens": true,
+    "no-arg": true,
+    "no-bitwise": true,
+    "no-conditional-assignment": true,
+    "no-consecutive-blank-lines": false,
+    "max-classes-per-file": false,
+    "member-ordering": false,
+    "only-arrow-functions": false,
+    "interface-name": false
+  },
+
+  "jsRules": {
+    "max-line-length": {
+      "options": [
+        150
+      ]
+    }
+  }
+}
