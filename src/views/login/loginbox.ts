@@ -45,6 +45,7 @@ class LoginBoxViewModel extends Views.ViewModel {
                 .flatMap((credentials) => {
                     return this.authenticate(credentials).map(() => true)
                         .catch((error: Error) => {
+                            console.log(error);
                             if (error.message === "unauthorized") {
                                 this.passwordViewModel.error.next("Invalid credentials");
                             } else {
