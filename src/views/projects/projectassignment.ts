@@ -43,8 +43,8 @@ export class ProjectAssignmentViewModel extends Views.ViewModel {
             assignments = assignments || [];
 
             const toggleProjects = toggleUser.workspaces
-                .map((w) => w.clients).reduce((p, c) => p.concat(c), [])
-                .map((c) => c.projects).reduce((p, c) => p.concat(c), []);
+                .map((w) => w.clients || []).reduce((p, c) => p.concat(c), [])
+                .map((c) => c.projects || []).reduce((p, c) => p.concat(c), []);
 
             const soncosoJobs = soncosoUser.jobs.groupBy<string>((job) => `${job.label} (${job.customer})`)
                 .map((job) => {

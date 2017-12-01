@@ -61,19 +61,34 @@ export class AuthenticateTogglUser {
 
     private fetchClients(workspace: TogglModel.Workspace): Rx.Observable<TogglModel.Workspace> {
         return this.api.getClients(workspace.id).flatMap((clients) => {
-            workspace.clients = clients;
-            return Rx.Observable.forkJoin(clients.map((client) => {
-                client.workspace = workspace;
-                return this.fetchProjects(client);
-            })).map(() => workspace);
+            workspace.clients = clients || [];
+            workspace.clients.push({
+                id: 0,
+                name: "[no client]",
+                projects: [],
+                workspace,
+                workspaceId : workspace.id,
+            });
+
+            return this.fetchProjects(workspace);
         });
     }
 
-    private fetchProjects(client: TogglModel.Client): Rx.Observable<TogglModel.Client> {
-        return this.api.getProjects(client.id).map((projects) => {
-            projects.forEach((p) => p.client = client);
-            client.projects = projects;
-            return client;
+    private fetchProjects(workspace: TogglModel.Workspace): Rx.Observable<TogglModel.Workspace> {
+        return this.api.getProjects(workspace.id).map((projects) => {
+            projects = projects || [];
+            projects.forEach((p) => p.clientId = p.clientId || 0);
+
+            projects.groupBy<number>((p) => p.clientId).forEach((g) => {
+                const client = workspace.clients.firstOrNull((c) => c.id === g.key);
+                if (!client) {
+                    console.warn("Failed to find client for projects:", g);
+                    return;
+                }
+                client.projects = g;
+                g.forEach((p) => p.client = client);
+            });
+            return workspace;
         });
     }
 }
@@ -88,7 +103,7 @@ export class GetTogglTimeRecords {
     public build(from: Date, until: Date): Rx.Observable<TogglModel.TimeRecord[]> {
         return this.togglStorage.currentTogglUser().flatMap((user) => {
             const requests = user.workspaces.map((workspace) => {
-                const allProjects = workspace.clients.map((c) => c.projects).reduce((p, c) => p.concat(c), []);
+                const allProjects = workspace.clients.map((c) => c.projects || []).reduce((p, c) => p.concat(c), []);
                 return this.api.getTimeRecords(workspace.id, from, until).map((records) => {
                     records.forEach((r) => {
                         r.start = r.start.round();

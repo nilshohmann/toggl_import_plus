@@ -43,7 +43,7 @@ class LoginBoxViewModel extends Views.ViewModel {
                     return !!c;
                 })
                 .flatMap((credentials) => {
-                    return this.authenticate(credentials).map(() => true)
+                    return this.authenticate(credentials).do(console.log).map(() => true)
                         .catch((error: Error) => {
                             console.log(error);
                             if (error.message === "unauthorized") {

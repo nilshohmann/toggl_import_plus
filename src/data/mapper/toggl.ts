@@ -19,7 +19,7 @@ export function userInfoToModel(dto: TogglDTO.UserInfoDTO): TogglModel.UserInfo 
 
 export function workspaceToModel(dto: TogglDTO.WorkspaceDTO): TogglModel.Workspace {
     return !dto ? null : {
-        clients: null,
+        clients: [],
         id: dto.id,
         name: dto.name,
     };
@@ -33,7 +33,7 @@ export function clientToModel(dto: TogglDTO.ClientDTO): TogglModel.Client {
     return !dto ? null : {
         id: dto.id,
         name: dto.name,
-        projects: null,
+        projects: [],
         workspace: null,
         workspaceId: dto.wid,
     };

@@ -18,7 +18,7 @@ export class TogglRestApi {
     private static ME = "/api/v8/me";
     private static WORKSPACES = "/api/v8/workspaces";
     private static CLIENTS = "/api/v8/workspaces/{0}/clients";
-    private static PROJECTS = "/api/v8/clients/{0}/projects";
+    private static PROJECTS = "/api/v8/workspaces/{0}/projects";
     private static DETAILS = "/reports/api/v2/details";
 
     private authString: string = null;
@@ -77,12 +77,12 @@ export class TogglRestApi {
     }
 
     /**
-     * Fetches all projects for a given client
+     * Fetches all projects for a given workspace
      *
-     * @param clientId Client id
+     * @param workspaceId Workspace id
      */
-    public getProjects(clientId: number): Rx.Observable<TogglModel.Project[]> {
-        return this.request(TogglRestApi.PROJECTS.format(clientId))
+    public getProjects(workspaceId: number): Rx.Observable<TogglModel.Project[]> {
+        return this.request(TogglRestApi.PROJECTS.format(workspaceId))
             .get()
             .map(TogglMapper.projectsToModel);
     }
